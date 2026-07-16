@@ -69,7 +69,7 @@
     "node": ">=18"
   },
   "dependencies": {
-    "@clack/prompts": "^0.11.0",
+    "@clack/prompts": "^1.7.0",
     "node-cli-banner": "^1.0.1",
     "picocolors": "^1.1.1"
   },
