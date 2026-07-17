@@ -167,7 +167,7 @@ export async function authRoutes(app${ts ? ": FastifyInstance" : ""}) {
 }
 `,
     });
-  } else {
+  } else if (config.framework === "hono") {
     files.push({
       path: `src/modules/auth/auth.routes.${e}`,
       content: `import { Hono } from 'hono';
@@ -189,6 +189,7 @@ authRoutes.post('/login', async (c) => {
 `,
     });
   }
+  // koa auth routes are generated in the Koa template
 
   return files;
 }

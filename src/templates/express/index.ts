@@ -192,47 +192,6 @@ app.listen(appEnv.PORT, appEnv.HOST, () => {
 `,
   });
 
-  if (config.features.testing) {
-    files.push({
-      path: `tests/health.test.${e}`,
-      content: ts
-        ? `import { describe, it, expect } from 'vitest';
-import { createApp } from '../src/app/create-app.js';
-
-describe('health', () => {
-  it('returns 200', async () => {
-    const app = createApp();
-    const server = app.listen(0);
-    const addr = server.address();
-    const port = typeof addr === 'object' && addr ? addr.port : 0;
-    const res = await fetch(\`http://127.0.0.1:\${port}/health\`);
-    expect(res.status).toBe(200);
-    const body = await res.json();
-    expect(body.status).toBe('ok');
-    server.close();
-  });
-});
-`
-        : `import { describe, it, expect } from 'vitest';
-import { createApp } from '../src/app/create-app.js';
-
-describe('health', () => {
-  it('returns 200', async () => {
-    const app = createApp();
-    const server = app.listen(0);
-    const addr = server.address();
-    const port = typeof addr === 'object' && addr ? addr.port : 0;
-    const res = await fetch(\`http://127.0.0.1:\${port}/health\`);
-    expect(res.status).toBe(200);
-    const body = await res.json();
-    expect(body.status).toBe('ok');
-    server.close();
-  });
-});
-`,
-    });
-  }
-
   return files;
 }
 
@@ -240,7 +199,7 @@ function createAppSource(config: ProjectConfig): string {
   const ts = config.language === "ts";
   const sec = config.features.security;
   const auth = config.features.auth !== "none";
-  const docs = config.features.apiDocs;
+  const docs = config.features.docs !== "none";
 
   return `${ts ? "import express from 'express';\n" : "import express from 'express';\n"}${sec ? "import helmet from 'helmet';\nimport cors from 'cors';\nimport compression from 'compression';\nimport rateLimit from 'express-rate-limit';\n" : ""}${config.features.logger === "pino" ? "import pinoHttp from 'pino-http';\nimport { logger } from '../lib/logger.js';\n" : ""}import { requestId } from '../middleware/request-id.js';
 import { errorHandler, notFoundHandler } from '../middleware/error-handler.js';

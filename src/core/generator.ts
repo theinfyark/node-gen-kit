@@ -26,9 +26,16 @@ import {
 import { expressDeps, expressDevDeps, expressFiles } from "../templates/express/index.js";
 import { fastifyDeps, fastifyFiles } from "../templates/fastify/index.js";
 import { honoDeps, honoFiles } from "../templates/hono/index.js";
+import { koaDeps, koaDevDeps, koaFiles } from "../templates/koa/index.js";
 import { authDeps, authDevDeps, authFiles } from "../templates/features/auth.js";
 import { ormDeps, ormDevDeps, ormFiles, redisDeps, redisFiles } from "../templates/features/orm.js";
 import { docsDeps, docsFiles, dockerFiles, ciFiles } from "../templates/features/infra.js";
+import {
+  testingDevDeps,
+  testingScripts,
+  testingConfigFiles,
+  healthTestFile,
+} from "../templates/features/testing.js";
 import { ver } from "./versions.js";
 import { registerBuiltinPlugins } from "../plugins/index.js";
 
@@ -54,7 +61,7 @@ function collectCoreFiles(config: ProjectConfig): {
   const files: GeneratedFile[] = [];
   let deps = baseDeps(config);
   let devDeps = baseDevDeps(config);
-  const scripts = defaultScripts(config);
+  const scripts = { ...defaultScripts(config), ...testingScripts(config) };
 
   files.push(gitignoreFile(), editorconfigFile(), readmeFile(config));
   files.push(...envFiles(config));
@@ -63,24 +70,40 @@ function collectCoreFiles(config: ProjectConfig): {
   files.push(...eslintPrettierFiles(config));
   files.push(...sharedErrorFiles(config));
   files.push(loggerFile(config));
+  files.push(...testingConfigFiles(config));
 
   if (config.features.validation) {
     deps.zod = ver("zod");
   }
 
+  if (
+    config.language === "ts" &&
+    config.framework === "express" &&
+    (config.features.docs === "swagger" || config.features.docs === "openapi")
+  ) {
+    devDeps["@types/swagger-ui-express"] = ver("@types/swagger-ui-express");
+  }
+
   if (config.framework === "express") {
     deps = mergeDeps(deps, expressDeps(config), authDeps(config), ormDeps(config), redisDeps(config), docsDeps(config));
-    devDeps = mergeDeps(devDeps, expressDevDeps(config), authDevDeps(config), ormDevDeps(config));
+    devDeps = mergeDeps(devDeps, expressDevDeps(config), authDevDeps(config), ormDevDeps(config), testingDevDeps(config));
     files.push(...expressFiles(config));
   } else if (config.framework === "fastify") {
     deps = mergeDeps(deps, fastifyDeps(config), authDeps(config), ormDeps(config), redisDeps(config), docsDeps(config));
-    devDeps = mergeDeps(devDeps, authDevDeps(config), ormDevDeps(config));
+    devDeps = mergeDeps(devDeps, authDevDeps(config), ormDevDeps(config), testingDevDeps(config));
     files.push(...fastifyFiles(config));
+  } else if (config.framework === "koa") {
+    deps = mergeDeps(deps, koaDeps(config), authDeps(config), ormDeps(config), redisDeps(config), docsDeps(config));
+    devDeps = mergeDeps(devDeps, koaDevDeps(config), authDevDeps(config), ormDevDeps(config), testingDevDeps(config));
+    files.push(...koaFiles(config));
   } else {
     deps = mergeDeps(deps, honoDeps(config), authDeps(config), ormDeps(config), redisDeps(config), docsDeps(config));
-    devDeps = mergeDeps(devDeps, authDevDeps(config), ormDevDeps(config));
+    devDeps = mergeDeps(devDeps, authDevDeps(config), ormDevDeps(config), testingDevDeps(config));
     files.push(...honoFiles(config));
   }
+
+  const healthTest = healthTestFile(config);
+  if (healthTest) files.push(healthTest);
 
   files.push(...authFiles(config));
   files.push(...ormFiles(config));
@@ -123,7 +146,7 @@ SOFTWARE.
 
 ### Added
 
-- Initial project scaffolded by node-gen
+- Initial project scaffolded with node-gen-kit
 `,
   });
 
@@ -220,11 +243,11 @@ export function defaultConfig(partial: Partial<ProjectConfig> & Pick<ProjectConf
       orm: "none",
       cache: "none",
       logger: "pino",
-      apiDocs: false,
+      docs: "none",
       docker: false,
       ci: true,
       security: true,
-      testing: true,
+      testing: "vitest",
       monitoring: true,
       gitInit: true,
       githubRepo: false,

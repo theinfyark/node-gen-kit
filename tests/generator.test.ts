@@ -23,11 +23,11 @@ describe("createProject", () => {
           orm: "none",
           cache: "none",
           logger: "pino",
-          apiDocs: true,
+          docs: "swagger",
           docker: true,
           ci: true,
           security: true,
-          testing: true,
+          testing: "vitest",
           monitoring: true,
           gitInit: false,
           githubRepo: false,
@@ -42,6 +42,7 @@ describe("createProject", () => {
     expect(existsSync(path.join(targetDir, "src/health/health.route.ts"))).toBe(true);
     expect(existsSync(path.join(targetDir, "src/modules/items/items.route.ts"))).toBe(true);
     expect(existsSync(path.join(targetDir, "src/modules/auth/auth.route.ts"))).toBe(true);
+    expect(existsSync(path.join(targetDir, "src/docs/openapi.ts"))).toBe(true);
     expect(existsSync(path.join(targetDir, "Dockerfile"))).toBe(true);
     expect(existsSync(path.join(targetDir, ".github/workflows/ci.yml"))).toBe(true);
     expect(existsSync(path.join(targetDir, "tests/health.test.ts"))).toBe(true);
@@ -49,6 +50,7 @@ describe("createProject", () => {
     const pkg = JSON.parse(readFileSync(path.join(targetDir, "package.json"), "utf8"));
     expect(pkg.dependencies.express).toBeTruthy();
     expect(pkg.dependencies.zod).toBeTruthy();
+    expect(pkg.dependencies["swagger-ui-express"]).toBeTruthy();
     expect(pkg.dependencies["env-ok-kit"]).toBeTruthy();
     expect(pkg.devDependencies.vitest).toBeTruthy();
     expect(pkg.type).toBe("module");
@@ -56,9 +58,9 @@ describe("createProject", () => {
     rmSync(root, { recursive: true, force: true });
   });
 
-  it("scaffolds fastify and hono minimal projects", async () => {
+  it("scaffolds fastify, hono, and koa projects", async () => {
     const root = mkdtempSync(path.join(tmpdir(), "node-gen-"));
-    for (const framework of ["fastify", "hono"] as const) {
+    for (const framework of ["fastify", "hono", "koa"] as const) {
       const targetDir = path.join(root, framework);
       await createProject(
         defaultConfig({
@@ -75,11 +77,11 @@ describe("createProject", () => {
             orm: "none",
             cache: "none",
             logger: "pino",
-            apiDocs: false,
+            docs: "none",
             docker: false,
             ci: false,
             security: true,
-            testing: true,
+            testing: "jest",
             monitoring: false,
             gitInit: false,
             githubRepo: false,
@@ -88,6 +90,9 @@ describe("createProject", () => {
       );
       expect(existsSync(path.join(targetDir, "src/index.ts"))).toBe(true);
       expect(existsSync(path.join(targetDir, "package.json"))).toBe(true);
+      expect(existsSync(path.join(targetDir, "jest.config.cjs"))).toBe(true);
+      const pkg = JSON.parse(readFileSync(path.join(targetDir, "package.json"), "utf8"));
+      expect(pkg.devDependencies.jest).toBeTruthy();
     }
     rmSync(root, { recursive: true, force: true });
   });

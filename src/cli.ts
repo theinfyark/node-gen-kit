@@ -6,7 +6,7 @@ import { createProject, defaultConfig } from "./core/generator.js";
 import type { ProjectConfig } from "./core/types.js";
 import path from "node:path";
 
-const VERSION = "1.0.0";
+const VERSION = "1.1.0";
 
 function printHelp(): void {
   console.log(`node-gen — Enterprise Node.js backend generator
@@ -82,7 +82,7 @@ export async function main(argv = process.argv.slice(2)): Promise<number> {
       version: VERSION,
       fields: [
         { label: "Mission", value: "Enterprise Node backends" },
-        { label: "Frameworks", value: "Express · Fastify · Hono" },
+        { label: "Frameworks", value: "Express · Fastify · Hono · Koa" },
       ],
     });
   } catch {
@@ -113,11 +113,11 @@ export async function main(argv = process.argv.slice(2)): Promise<number> {
         orm: "none",
         cache: "none",
         logger: "pino",
-        apiDocs: false,
+        docs: "none",
         docker: false,
         ci: true,
         security: true,
-        testing: true,
+        testing: "vitest",
         monitoring: true,
         gitInit: !args.skipGit,
         githubRepo: false,

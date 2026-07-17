@@ -2,13 +2,36 @@
 
 ## Introduction
 
-**node-gen-kit** (`node-gen` CLI) is an interactive generator that scaffolds **production-ready Node.js backends** — comparable to `create-next-app`, focused on enterprise APIs.
+**node-gen-kit** (`node-gen` CLI) scaffolds production-ready Node.js backends — comparable to `create-next-app`, focused on enterprise APIs.
 
 ```bash
 npx node-gen-kit
 # or
 npx node-gen
 ```
+
+## What this package covers
+
+| Area | Options |
+|------|---------|
+| **Languages** | TypeScript, JavaScript |
+| **Frameworks** | Express, Fastify, Hono, Koa |
+| **Module systems** | ESM, CommonJS |
+| **Package managers** | npm, pnpm, yarn, bun |
+| **Node** | 20 LTS, 22 LTS |
+| **API style** | REST |
+| **Auth** | JWT, Passport (local + JWT) |
+| **Validation** | Zod |
+| **Databases** | PostgreSQL, MongoDB, MySQL, SQLite |
+| **ORM** | Prisma, Drizzle, Mongoose |
+| **Cache** | Redis |
+| **Logger** | Pino, structured-logger-kit |
+| **API docs** | Swagger UI, Scalar, OpenAPI JSON |
+| **Testing** | Vitest, Jest, Mocha + Chai |
+| **Ops** | Docker, docker-compose, GitHub Actions, Dependabot, CodeQL |
+| **Security** | Helmet / secure headers, CORS, compression, rate limiting |
+| **Env** | Multi-env files + `env-ok-kit` validation |
+| **Architecture** | Layered modules (routes → services → store) |
 
 ## Why this package exists
 
@@ -23,19 +46,6 @@ npx node-gen-kit
 ```
 
 Requires Node.js 18+.
-
-## Features
-
-- Express, Fastify, and Hono
-- TypeScript or JavaScript (ESM / CJS)
-- Node 20 / 22 LTS
-- Zod validation, JWT / Passport auth
-- Prisma, Drizzle, Mongoose
-- Redis cache, Pino or structured-logger-kit
-- OpenAPI + Scalar / Swagger UI
-- Docker, GitHub Actions, Dependabot, CodeQL
-- Plugin architecture for future frameworks and features
-- Programmatic API: `createProject(config)`
 
 ## Quick Start
 
@@ -60,7 +70,7 @@ await createProject(
   defaultConfig({
     projectName: "orders-api",
     targetDir: "./orders-api",
-    framework: "fastify",
+    framework: "koa",
     features: {
       auth: "jwt",
       validation: true,
@@ -68,11 +78,11 @@ await createProject(
       orm: "prisma",
       cache: "none",
       logger: "pino",
-      apiDocs: true,
+      docs: "swagger",
       docker: true,
       ci: true,
       security: true,
-      testing: true,
+      testing: "jest",
       monitoring: true,
       gitInit: true,
       githubRepo: false,
@@ -91,6 +101,7 @@ await createProject(
     projectName: "orders-api",
     targetDir: "./orders-api",
     framework: "hono",
+    language: "js",
   }),
 );
 ```
@@ -110,7 +121,7 @@ node-gen [project-name] [options]
 
 Options:
   --yes, -y          Non-interactive defaults
-  --framework <name> express | fastify | hono
+  --framework <name> express | fastify | hono | koa
   --lang <name>      ts | js
   --pm <name>        npm | pnpm | yarn | bun
   --skip-install     Skip dependency install
@@ -130,7 +141,7 @@ src/
   middleware/
   health/
   lib/           # logger, db, redis
-  docs/          # OpenAPI (optional)
+  docs/          # OpenAPI / Swagger / Scalar (optional)
 tests/
 ```
 
@@ -154,26 +165,26 @@ Register a custom generator plugin (`id`, `applies`, `apply`).
 
 ## Examples
 
-### Express + JWT + Zod
+### Express + JWT + Swagger
 
 ```bash
 npx node-gen-kit shop-api --yes --framework express
 ```
 
-Then enable auth in prompts, or use the programmatic API with `features.auth: "jwt"`.
+Then enable auth and Swagger in prompts, or use the programmatic API with `features.auth: "jwt"` and `features.docs: "swagger"`.
 
-### Fastify + Prisma + SQLite
+### Koa + Jest
 
 ```ts
 await createProject(
   defaultConfig({
     projectName: "notes",
     targetDir: "./notes",
-    framework: "fastify",
+    framework: "koa",
     features: {
       ...defaultConfig({ projectName: "notes", targetDir: "./notes" }).features,
-      database: "sqlite",
-      orm: "prisma",
+      testing: "jest",
+      docs: "swagger",
     },
   }),
 );
@@ -204,8 +215,8 @@ Templates avoid unnecessary dependencies. In-memory stores are used for the samp
 
 ## FAQ
 
-**Can I add Koa / GraphQL later?**  
-Yes — plugins are planned; see ROADMAP.md.
+**Can I add GraphQL later?**  
+Plugins are planned; see ROADMAP.md.
 
 **Does it create empty folders?**  
 No. Only selected features are generated.

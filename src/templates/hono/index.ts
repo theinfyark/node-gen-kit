@@ -14,7 +14,7 @@ export function honoFiles(config: ProjectConfig): GeneratedFile[] {
   const ts = config.language === "ts";
   const zod = config.features.validation;
   const auth = config.features.auth !== "none";
-  const docs = config.features.apiDocs;
+  const docs = config.features.docs !== "none";
 
   const files: GeneratedFile[] = [
     {
@@ -168,25 +168,6 @@ serve({ fetch: app.fetch, port: appEnv.PORT, hostname: appEnv.HOST }, (info) => 
 `,
     },
   ];
-
-  if (config.features.testing) {
-    files.push({
-      path: `tests/health.test.${e}`,
-      content: `import { describe, it, expect } from 'vitest';
-import { createApp } from '../src/app/create-app.js';
-
-describe('health', () => {
-  it('returns 200', async () => {
-    const app = createApp();
-    const res = await app.request('/health');
-    expect(res.status).toBe(200);
-    const body = await res.json();
-    expect(body.status).toBe('ok');
-  });
-});
-`,
-    });
-  }
 
   return files;
 }

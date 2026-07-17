@@ -17,4 +17,6 @@ export type {
   Orm,
   LoggerChoice,
   CacheChoice,
+  DocsChoice,
+  TestRunner,
 } from "./core/types.js";

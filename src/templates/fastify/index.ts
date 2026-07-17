@@ -18,7 +18,7 @@ export function fastifyFiles(config: ProjectConfig): GeneratedFile[] {
   const ts = config.language === "ts";
   const zod = config.features.validation;
   const auth = config.features.auth !== "none";
-  const docs = config.features.apiDocs;
+  const docs = config.features.docs !== "none";
   const sec = config.features.security;
 
   const files: GeneratedFile[] = [
@@ -174,25 +174,6 @@ logger.info(\`🚀 listening on http://\${appEnv.HOST}:\${appEnv.PORT}\`);
 `,
     },
   ];
-
-  if (config.features.testing) {
-    files.push({
-      path: `tests/health.test.${e}`,
-      content: `import { describe, it, expect, afterAll } from 'vitest';
-import { createApp } from '../src/app/create-app.js';
-
-describe('health', () => {
-  it('returns 200', async () => {
-    const app = await createApp();
-    const res = await app.inject({ method: 'GET', url: '/health' });
-    expect(res.statusCode).toBe(200);
-    expect(res.json().status).toBe('ok');
-    await app.close();
-  });
-});
-`,
-    });
-  }
 
   return files;
 }

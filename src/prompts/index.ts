@@ -13,6 +13,8 @@ import type {
   Orm,
   LoggerChoice,
   CacheChoice,
+  DocsChoice,
+  TestRunner,
 } from "../core/types.js";
 import { defaultConfig } from "../core/generator.js";
 
@@ -51,6 +53,7 @@ export async function runPrompts(cwd = process.cwd()): Promise<ProjectConfig> {
       { value: "express", label: "Express" },
       { value: "fastify", label: "Fastify" },
       { value: "hono", label: "Hono" },
+      { value: "koa", label: "Koa" },
     ],
   });
   isCancel(framework);
@@ -127,8 +130,8 @@ export async function runPrompts(cwd = process.cwd()): Promise<ProjectConfig> {
         p.confirm({ message: "Add Redis cache?", initialValue: false }),
       logger: () =>
         p.confirm({ message: "Configure logger?", initialValue: true }),
-      apiDocs: () =>
-        p.confirm({ message: "Add API docs (OpenAPI / Scalar)?", initialValue: false }),
+      docs: () =>
+        p.confirm({ message: "Add API documentation?", initialValue: false }),
       docker: () =>
         p.confirm({ message: "Add Docker?", initialValue: false }),
       ci: () =>
@@ -136,7 +139,7 @@ export async function runPrompts(cwd = process.cwd()): Promise<ProjectConfig> {
       security: () =>
         p.confirm({ message: "Enable security middleware defaults?", initialValue: true }),
       testing: () =>
-        p.confirm({ message: "Add Vitest tests?", initialValue: true }),
+        p.confirm({ message: "Add tests?", initialValue: true }),
       monitoring: () =>
         p.confirm({ message: "Add monitoring stub?", initialValue: true }),
       gitInit: () =>
@@ -210,6 +213,34 @@ export async function runPrompts(cwd = process.cwd()): Promise<ProjectConfig> {
     logger = l as LoggerChoice;
   }
 
+  let docs: DocsChoice = "none";
+  if (optional.docs) {
+    const d = await p.select({
+      message: "API docs",
+      options: [
+        { value: "swagger", label: "Swagger UI", hint: "recommended" },
+        { value: "scalar", label: "Scalar" },
+        { value: "openapi", label: "OpenAPI JSON only" },
+      ],
+    });
+    isCancel(d);
+    docs = d as DocsChoice;
+  }
+
+  let testing: TestRunner = "none";
+  if (optional.testing) {
+    const t = await p.select({
+      message: "Test runner",
+      options: [
+        { value: "vitest", label: "Vitest", hint: "recommended" },
+        { value: "jest", label: "Jest" },
+        { value: "mocha", label: "Mocha + Chai" },
+      ],
+    });
+    isCancel(t);
+    testing = t as TestRunner;
+  }
+
   const cache: CacheChoice = optional.cache ? "redis" : "none";
   const name = String(projectName);
 
@@ -229,11 +260,11 @@ export async function runPrompts(cwd = process.cwd()): Promise<ProjectConfig> {
       orm,
       cache,
       logger,
-      apiDocs: Boolean(optional.apiDocs),
+      docs,
       docker: Boolean(optional.docker),
       ci: Boolean(optional.ci),
       security: Boolean(optional.security),
-      testing: Boolean(optional.testing),
+      testing,
       monitoring: Boolean(optional.monitoring),
       gitInit: Boolean(optional.gitInit),
       githubRepo: Boolean(optional.githubRepo),
