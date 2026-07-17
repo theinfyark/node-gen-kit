@@ -64,7 +64,7 @@ npx node-gen my-api --yes
 ### TypeScript (programmatic)
 
 ```ts
-import { createProject, defaultConfig } from 'node-gen';
+import { createProject, defaultConfig } from 'node-gen-kit';
 
 await createProject(
   defaultConfig({
@@ -94,7 +94,7 @@ await createProject(
 ### JavaScript
 
 ```js
-import { createProject, defaultConfig } from 'node-gen';
+import { createProject, defaultConfig } from 'node-gen-kit';
 
 await createProject(
   defaultConfig({

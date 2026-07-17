@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.1.3] - 2026-07-17
+
+### Changed
+
+- Aligned package, folder, and GitHub repository names to npm registry name `node-gen-kit`
+
 ## [Unreleased]
 
 ### Changed

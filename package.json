@@ -1,13 +1,14 @@
 {
-  "name": "node-gen",
-  "version": "1.1.2",
+  "name": "node-gen-kit",
+  "version": "1.1.3",
   "description": "Interactive CLI to scaffold production-ready Node.js backends — Express, Fastify, Hono, TypeScript, Zod, Prisma, Docker, and CI.",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "bin": {
-    "node-gen": "./dist/cli.js"
+    "node-gen": "./dist/cli.js",
+    "node-gen-kit": "./dist/cli.js"
   },
   "exports": {
     ".": {
@@ -32,8 +33,8 @@
     "prepublishOnly": "npm run typecheck && npm run test && npm run build"
   },
   "keywords": [
-    "node-gen",
-    "node-gen",
+    "node-gen-kit",
+    "node-gen-kit",
     "create-node-app",
     "scaffold",
     "generator",
@@ -56,12 +57,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/theinfyark/node-gen.git"
+    "url": "git+https://github.com/theinfyark/node-gen-kit.git"
   },
   "bugs": {
-    "url": "https://github.com/theinfyark/node-gen/issues"
+    "url": "https://github.com/theinfyark/node-gen-kit/issues"
   },
-  "homepage": "https://github.com/theinfyark/node-gen#readme",
+  "homepage": "https://github.com/theinfyark/node-gen-kit#readme",
   "funding": {
     "type": "github",
     "url": "https://github.com/sponsors/anilachary"
