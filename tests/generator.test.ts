@@ -63,7 +63,7 @@ describe('createProject', () => {
     expect(pkg.dependencies.express).toBeTruthy();
     expect(pkg.dependencies.zod).toBeTruthy();
     expect(pkg.dependencies['swagger-ui-express']).toBeTruthy();
-    expect(pkg.dependencies['env-ok']).toBeTruthy();
+    expect(pkg.dependencies['env-ok-kit']).toBeTruthy();
     expect(pkg.devDependencies.vitest).toBeTruthy();
     expect(pkg.type).toBe('module');
 

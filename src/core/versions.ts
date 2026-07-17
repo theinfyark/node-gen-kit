@@ -55,7 +55,7 @@ export const VERSIONS = {
   winston: '^3.17.0',
   'structured-logger-kit': '^1.0.1',
   // env
-  'env-ok': '^1.0.2',
+  'env-ok-kit': '^1.0.3',
   dotenv: '^16.5.0',
   // docs
   '@scalar/express-api-reference': '^0.7.31',

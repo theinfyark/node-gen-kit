@@ -296,7 +296,7 @@ Health check: [http://localhost:${config.port}/health](http://localhost:${config
 
 ## Environment
 
-Copy \`.env.example\` to \`.env.local\` and adjust values. Validated via \`env-ok\`.
+Copy \`.env.example\` to \`.env.local\` and adjust values. Validated via \`env-ok-kit\`.
 
 ## Architecture
 
@@ -481,7 +481,7 @@ export function baseDevDeps(config: ProjectConfig): DepMap {
 export function baseDeps(config: ProjectConfig): DepMap {
   const d: DepMap = {
     dotenv: ver('dotenv'),
-    'env-ok': ver('env-ok'),
+    'env-ok-kit': ver('env-ok-kit'),
   };
   if (config.features.logger === 'pino') {
     d.pino = ver('pino');
