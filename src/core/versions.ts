@@ -91,6 +91,9 @@ export const VERSIONS = {
   '@types/mocha': '^10.0.10',
   '@types/chai': '^5.2.2',
   'tsc-alias': '^1.8.16',
+  // lint / format
+  eslint: '^9.28.0',
+  prettier: '^3.5.3',
 } as const;
 
 export type VersionKey = keyof typeof VERSIONS;

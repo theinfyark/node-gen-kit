@@ -2,12 +2,22 @@
 
 
 
+
+## [1.1.6] - 2026-07-18
+
+### Fixed
+
+- Put eslint/prettier and pino-pretty in `devDependencies` (runtime dotenv/env-ok-kit stay in `dependencies`)
+
+
+
+
 ## [1.1.5] - 2026-07-18
 
 ### Fixed
 
-- JavaScript scaffolds no longer emit TypeScript \`import type\` in OpenAPI/Swagger docs
-- Always set \`"type": "module"\` for generated JavaScript projects
+- JavaScript scaffolds no longer emit TypeScript `import type` in OpenAPI/Swagger docs
+- Always set `"type": "module"` for generated JavaScript projects
 
 
 
@@ -15,7 +25,7 @@
 
 ### Fixed
 
-- Clarify that \`npm install\` does not scaffold; require interactive TTY for prompts
+- Clarify that `npm install` does not scaffold; require interactive TTY for prompts
 - Print clear next-step instructions when run without a TTY
 - Keep CLI version in sync with package.json
 

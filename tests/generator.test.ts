@@ -64,7 +64,12 @@ describe('createProject', () => {
     expect(pkg.dependencies.zod).toBeTruthy();
     expect(pkg.dependencies['swagger-ui-express']).toBeTruthy();
     expect(pkg.dependencies['env-ok-kit']).toBeTruthy();
+    expect(pkg.dependencies.dotenv).toBeTruthy();
     expect(pkg.devDependencies.vitest).toBeTruthy();
+    expect(pkg.devDependencies.eslint).toBeTruthy();
+    expect(pkg.devDependencies.prettier).toBeTruthy();
+    expect(pkg.devDependencies['pino-pretty']).toBeTruthy();
+    expect(pkg.dependencies['pino-pretty']).toBeUndefined();
     expect(pkg.type).toBe('module');
 
     rmSync(root, { recursive: true, force: true });

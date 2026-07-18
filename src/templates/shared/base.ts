@@ -450,6 +450,8 @@ export function defaultScripts(config: ProjectConfig): Record<string, string> {
   const isTs = config.language === 'ts';
   const scripts: Record<string, string> = {
     start: isTs ? 'node dist/index.js' : `node src/index.${e}`,
+    lint: 'eslint .',
+    format: 'prettier --write .',
   };
   if (isTs) {
     scripts.dev = 'tsx watch src/index.ts';
@@ -471,23 +473,30 @@ export function defaultScripts(config: ProjectConfig): Record<string, string> {
 }
 
 export function baseDevDeps(config: ProjectConfig): DepMap {
-  const d: DepMap = {};
+  const d: DepMap = {
+    eslint: ver('eslint'),
+    prettier: ver('prettier'),
+  };
   if (config.language === 'ts') {
     d.typescript = ver('typescript');
     d.tsx = ver('tsx');
     d['@types/node'] = ver('@types/node');
+  }
+  // Pretty transport is only used in non-production logger config
+  if (config.features.logger === 'pino') {
+    d['pino-pretty'] = ver('pino-pretty');
   }
   return d;
 }
 
 export function baseDeps(config: ProjectConfig): DepMap {
   const d: DepMap = {
+    // Runtime: app always loads .env + validates env at boot
     dotenv: ver('dotenv'),
     'env-ok-kit': ver('env-ok-kit'),
   };
   if (config.features.logger === 'pino') {
     d.pino = ver('pino');
-    d['pino-pretty'] = ver('pino-pretty');
   }
   if (config.features.logger === 'winston') {
     d.winston = ver('winston');
