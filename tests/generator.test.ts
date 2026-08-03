@@ -51,9 +51,9 @@ describe('createProject', () => {
     expect(
       existsSync(path.join(targetDir, 'src/controllers/items.controller.ts')),
     ).toBe(true);
-    expect(existsSync(path.join(targetDir, 'src/routes/orders.routes.ts'))).toBe(
-      true,
-    );
+    expect(
+      existsSync(path.join(targetDir, 'src/routes/orders.routes.ts')),
+    ).toBe(true);
     expect(
       existsSync(path.join(targetDir, 'src/routes/profiles.routes.ts')),
     ).toBe(true);
@@ -181,9 +181,9 @@ describe('createProject', () => {
     expect(existsSync(path.join(targetDir, 'src/middleware/auth.ts'))).toBe(
       true,
     );
-    expect(
-      existsSync(path.join(targetDir, 'src/models/items.schema.ts')),
-    ).toBe(true);
+    expect(existsSync(path.join(targetDir, 'src/models/items.schema.ts'))).toBe(
+      true,
+    );
     const env = readFileSync(path.join(targetDir, '.env.example'), 'utf8');
     expect(env).toContain('AUTH_JWKS_URI');
     rmSync(root, { recursive: true, force: true });

@@ -1,10 +1,7 @@
 import type { ProjectConfig, GeneratedFile, DepMap } from '../../core/types.js';
 import { ver } from '../../core/versions.js';
 import { ext } from '../../utils/helpers.js';
-import {
-  expressLayeredRoutesIndex,
-  expressMvcFiles,
-} from './mvc.js';
+import { expressLayeredRoutesIndex, expressMvcFiles } from './mvc.js';
 
 export function expressDeps(config: ProjectConfig): DepMap {
   const d: DepMap = {

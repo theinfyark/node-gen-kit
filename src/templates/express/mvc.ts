@@ -65,7 +65,12 @@ function mvcDomainFiles(
     },
     {
       path: `src/routes/${name}.routes.${e}`,
-      content: routeSource(ts, name, singular, hasValidation && name === 'items'),
+      content: routeSource(
+        ts,
+        name,
+        singular,
+        hasValidation && name === 'items',
+      ),
     },
   ];
 
@@ -552,7 +557,9 @@ ${auth ? "apiRouter.use('/auth', authRouter);\n" : ''}
 }
 
 /** Layered architecture: keep modules, but expose a main routes/index aggregator. */
-export function expressLayeredRoutesIndex(config: ProjectConfig): GeneratedFile {
+export function expressLayeredRoutesIndex(
+  config: ProjectConfig,
+): GeneratedFile {
   const e = ext(config.language);
   const auth = config.features.auth !== 'none';
   return {
