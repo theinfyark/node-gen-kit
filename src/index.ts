@@ -1,6 +1,7 @@
 export { createProject, defaultConfig } from './core/generator.js';
 export { registerPlugin, getPlugins, clearPlugins } from './core/registry.js';
 export { registerBuiltinPlugins } from './plugins/index.js';
+export { writeFiles, resolveContainedPath, assertTargetAvailable } from './core/writer.js';
 export type {
   ProjectConfig,
   GenerateResult,

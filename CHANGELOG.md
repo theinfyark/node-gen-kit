@@ -1,9 +1,10 @@
 # Changelog
 
+## [1.3.0] - 2026-08-24
 
+### Security
 
-
-
+- Reject absolute paths and `..` traversal when writing generated files (`resolveContainedPath`)
 
 ## [1.2.0] - 2026-07-19
 

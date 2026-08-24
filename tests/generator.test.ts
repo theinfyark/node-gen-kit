@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { mkdtempSync, readFileSync, existsSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
-import { createProject, defaultConfig } from '../src/index.js';
+import { createProject, defaultConfig, resolveContainedPath } from '../src/index.js';
 
 describe('createProject', () => {
   it('scaffolds express+ts with health and items', async () => {
@@ -316,5 +316,15 @@ describe('createProject', () => {
     );
 
     rmSync(root, { recursive: true, force: true });
+  });
+});
+
+describe('resolveContainedPath', () => {
+  it('rejects path traversal in generated files', () => {
+    const root = mkdtempSync(path.join(tmpdir(), 'node-gen-safe-'));
+    expect(() => resolveContainedPath(root, '../../../etc/passwd')).toThrow(/outside/);
+    expect(() => resolveContainedPath(root, '/tmp/evil')).toThrow(/absolute/);
+    const ok = resolveContainedPath(root, 'src/index.ts');
+    expect(ok.startsWith(path.resolve(root))).toBe(true);
   });
 });
